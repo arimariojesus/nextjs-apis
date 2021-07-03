@@ -14,7 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         break;
       case 'POST':
         if (body) {
-          await db.collection('user').insert({ name: body.name });
+          await db.collection('user').insertOne({ name: body.name });
           res.json({ message: 'Cadastro realizado com sucesso!' });
         }
         break;
