@@ -1,18 +1,21 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { connectToDatabase } from '../../../../utils/mongodb';
+import { ObjectId } from 'mongodb';
 
-const handler = (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { method, query } = req;
 
+    const objectid = new ObjectId(String(query.username));
+
     switch (method) {
       case 'GET':
+        const { db } = await connectToDatabase();
+        const data = await db.collection('user').findOne({ "_id": objectid });
+
         res.status(200).json({
           method,
-          users: [
-            { id: 1, description: 'Produto 1', method, query },
-            { id: 2, description: 'Produto 2', method, query },
-            { id: 3, description: 'Produto 3', method, query },
-          ],
+          user: data,
         });
         break;
       default:
@@ -22,6 +25,6 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
   } catch (err) {
     res.status(500).json({ statusCode: 500, message: err.message });
   }
-}
+};
 
 export default handler;

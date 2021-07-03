@@ -32,6 +32,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   // the component.
   const response = await axios.get('http://localhost:3000/api/users');
   const items: User[] = await response.data;
+  console.log(items);
   return { props: { items } }
 }
 
